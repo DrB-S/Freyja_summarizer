@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 ###########################################
-# Freyja Summarizer v0.8.7                #
+# Freyja Summarizer v0.8.9                #
 # Written by Stephen Beckstrom-Sternberg  #
 # Assisted by Khalil Khoury               #
 # Creates a simplified Freyja summary     #
