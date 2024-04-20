@@ -158,10 +158,10 @@ if __name__ == "__main__":
     containing the abundance for each lineage, including null values"""
     df = save_df(strainHash, sortedLineages)
 
-    """Print dataframe to screen"""
-    print("Dataframe:")
-    print(df)
-
-    """Write modified dataframe as tsv"""
+    """Write modified dataframe as csv"""
     df.write_csv(outputFile)
     print("Results written to ", outputFile)
+    
+    """Print dataframe to screen"""
+    with pl.Config(tbl_cols=-1, tbl_rows=-1):
+        print(df)
