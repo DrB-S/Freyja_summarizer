@@ -16,16 +16,9 @@ import polars as pl
 """input file"""
 aggregated_file = "aggregated-freyja.tsv"
 """output file"""
-outputFile = "Freyja_aggregated_summary_wPolars.tsv"
+outputFile = "Freyja_aggregated_summary.csv"
 
 """Simplify each abundance value to 4 decimal places and remove leading zero"""
-
-
-#def abundance_simplify(abundance):
-#    abundance = re.sub(r"1\.00(\d)+\D*", r"1.00", abundance)
-#    abundance = re.sub(r"0\.(\d)(\d)(\d)(\d)(\d)+\D*", r".\1\2\3\4", abundance)
-#    return abundance
-
 def abundance_simplify(abundance):
     if not isinstance(abundance, str):  # Check if abundance is already a string
         abundance = str(abundance)  # Convert abundance to string if it's not
@@ -34,10 +27,7 @@ def abundance_simplify(abundance):
     abundance = float(abundance)  # Convert abundance to float (f64)
     return abundance
 
-
 """Get simplified lineage names"""
-
-
 def perform_name_replacements(lineage):
     patterns = [
         (r"^\[\('", ""),  # Pattern 1: Remove beginning "(\['"
@@ -52,16 +42,13 @@ def perform_name_replacements(lineage):
         lineage = re.sub(pattern, replacement, lineage)
     return lineage
 
-
+"""Simplify coverage to 2 decimal places"""
 def coverage_simplify(coverage):
     coverage = float(coverage)
     coverage = round(coverage, 2)
     return coverage
 
-
 """Process the aggregated Freyja file"""
-
-
 def process_aggregated_freya_file(aggregated_file):
     print("Opening ", aggregated_file, "\n")  # input filename
 
@@ -111,14 +98,13 @@ def process_aggregated_freya_file(aggregated_file):
 
 def save_df(strainHash, sortedLineages):
     covg_pct = "Coverage (%)"
-    # headerList = ["Sample", covg_pct] + sortedLineages
     print("Sorted lineage list: ", sortedLineages)
     print("Number of lineages: " + str(len(sortedLineages)))
 
-    # Initialize an empty list to hold the rows
+    """Initialize an empty list to hold the rows"""
     rows = []
 
-    # Flatten the nested data before populating the rows list
+    """Flatten the nested data before populating the rows list"""
     for sample_covg, lin_abundances in strainHash.items():
         sample, covg = sample_covg  # Unpack the tuple
 
@@ -128,25 +114,24 @@ def save_df(strainHash, sortedLineages):
                 thisRow[lineage] = abundance_simplify(abundance)
         rows.append(thisRow)
 
-    # Create a DataFrame from the flattened rows
+    """Create a DataFrame from the flattened rows"""
     df = pl.DataFrame(rows)
 
-    # Sort the DataFrame by 'Sample'
+    """Sort the DataFrame by 'Sample'"""
     df = df.sort("Sample")
 
-    # Get the abundance columns excluding 'Sample' and 'Coverage (%)'
+    """Get the abundance columns excluding 'Sample' and 'Coverage (%)'"""
     abundance_columns = [
         col for col in df.columns if col not in ["Sample", covg_pct]
     ]
 
-    # Sort the abundance columns alphabetically by lineage name
+    """Sort the abundance columns alphabetically by lineage name"""
     sorted_abundance_columns = sorted(abundance_columns, key=lambda x: x.lower())
 
-    # Select columns in the desired order
+    """Select columns in the desired order"""
     df = df.select(["Sample", covg_pct] + sorted_abundance_columns)
 
     return df
-
 
 if __name__ == "__main__":
     """Process aggregated Freyja file"""
