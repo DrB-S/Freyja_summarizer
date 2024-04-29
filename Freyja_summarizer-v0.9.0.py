@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 ###########################################
-# Freyja Summarizer v0.8.9                #
+# Freyja Summarizer v0.9.0                #
 # Written by Stephen Beckstrom-Sternberg  #
 # Assisted by Khalil Khoury               #
 # Creates a simplified Freyja summary     #
@@ -12,11 +12,46 @@
 
 import re
 import polars as pl
+import argparse
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s - %(message)s", datefmt="%y-%b-%d %H:%M:%S", level=logging.INFO
+)
+
+"""
+Parse command-line arguments or use defaults
+    
+    Image types: eps, pdf (default), png, svg, tiff
+"""
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "-i",
+    "--input",
+    type=str,
+    help="input aggregated Freyja file name",
+    default="aggregated-freyja.tsv",
+)
+parser.add_argument(
+    "-o", "--out", type=str, help="final file name", default="Freyja_aggregated_summary"
+)
+parser.add_argument(
+    "-t", "--type", type=str, help="file extension for output table", default="csv"
+)
+parser.add_argument(
+    "-v",
+    "--version",
+    help="print version and exit",
+    action="version",
+    version="%(prog)s " + "v0.9.0",
+)
+args = parser.parse_args()
 
 """input file"""
-aggregated_file = "aggregated-freyja.tsv"
+aggregated_file = args.input
 """output file"""
-outputFile = "Freyja_aggregated_summary.csv"
+outputFile = (args.out + "." + args.type)
+
 
 """Simplify each abundance value to 4 decimal places and remove leading zero"""
 def abundance_simplify(abundance):
