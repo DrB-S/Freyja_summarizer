@@ -11,9 +11,9 @@
 ###########################################
 
 import re
-import polars as pl
 import argparse
 import logging
+import polars as pl
 
 logging.basicConfig(
     format="%(asctime)s - %(message)s", datefmt="%y-%b-%d %H:%M:%S", level=logging.INFO
