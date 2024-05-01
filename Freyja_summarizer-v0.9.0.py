@@ -50,7 +50,7 @@ args = parser.parse_args()
 """input file"""
 aggregated_file = args.input
 """output file"""
-outputFile = (args.out + "." + args.type)
+outputFile = args.out + "." + args.type
 
 
 """Simplify each abundance value to 4 decimal places and remove leading zero"""
@@ -181,7 +181,8 @@ if __name__ == "__main__":
     """Write modified dataframe as csv"""
     df.write_csv(outputFile)
     print("Results written to ", outputFile)
-    
+
     """Print dataframe to screen"""
     with pl.Config(tbl_cols=-1, tbl_rows=-1):
         print(df)
+        
