@@ -15,10 +15,10 @@ git clone https://github.com/DrB-S/freyja_summarizer.git
 
 freyja_summarizer requires the following dependencies:
   - python3
-  - argparse
-  - logging
-  - polars
-  - re
+    - argparse
+    - logging
+    - polars
+    - re
 
 ### Install dependencies
 ```bash
